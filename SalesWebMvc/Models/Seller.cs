@@ -30,7 +30,6 @@ namespace SalesWebMvc.Models
         public double BaseSalary { get; set; }
 
         [Display(Name = "Departamento")]
-        [Required(ErrorMessage = "Campo {0} Obrigatório")]
         public Department Department { get; set; }
 
         [Display(Name = "Departamento")]
