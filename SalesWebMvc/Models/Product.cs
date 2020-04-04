@@ -17,7 +17,6 @@ namespace SalesWebMvc.Models
         [Display(Name ="Valor")]
         public double Value { get; set; }
 
-        public int SalesRecordId { get; set; }
 
         public Product()
         {
