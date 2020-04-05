@@ -17,8 +17,10 @@ namespace SalesWebMvc.Models
         public double Amount { get; set; }
         public SalesStatus Status  { get; set; }
 
-        [Display(Name ="Venedor")]
-        public Seller Seller { get; set; } 
+        [Display(Name ="Vendedor")]
+        public Seller Seller { get; set; }
+
+        public int SellerId { get; set; }
 
         public SalesRecord()
         {
@@ -30,6 +32,13 @@ namespace SalesWebMvc.Models
             Id = id;
             Date = date;
             Amount = amount;
+            Status = status;
+            Seller = seller;
+        }
+        public SalesRecord(int id, DateTime date, SalesStatus status, Seller seller)
+        {
+            Id = id;
+            Date = date;
             Status = status;
             Seller = seller;
         }

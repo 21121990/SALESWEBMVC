@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesWebMvc.Models;
 using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Models.ViewModels;
+using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Services
 {
@@ -54,5 +56,16 @@ namespace SalesWebMvc.Services
                 .GroupBy(x => x.Seller.Department)
                 .ToListAsync();
         }
+        public async Task InsertAsync(SalesRecord salesRecord)
+        {
+            _context.Add(salesRecord);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<List<SalesRecord>> FindAllAsyncDate(DateTime? Date)
+        {
+          
+            return  await _context.SalesRecord.Where(x => x.Date >= Date).ToListAsync();
+        }
+
     }
 }

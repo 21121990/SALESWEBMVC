@@ -1,0 +1,86 @@
+﻿@model SalesWebMvc.Models.ViewModels.SellerFormViewModel
+
+@{
+    ViewData["Title"] = "Criar";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Controle de vendas</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SalesControl">
+
+            <div class="form-group">
+                <label asp-for="Seller.Id" class="control-label">Vendedor</label>
+                <select asp-for="Seller.Id" asp-items="@(new SelectList(Model.SellerColection, "Id","Name"));" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Vendas</h3>
+    </div>
+    @if (Model.SalesRecords != null)
+    {
+        <div class="panel-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr class="success">
+                        <th>
+                            @Html.DisplayNameFor(model => model.SalesRecord.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SalesRecord.Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SalesRecord.Seller)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SalesRecord.Amount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SalesRecord.Status)
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.SalesRecords)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Seller.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
