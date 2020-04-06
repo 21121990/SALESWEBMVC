@@ -10,7 +10,7 @@ namespace SalesWebMvc.Models.ViewModels
     {
         public Seller Seller { get; set; }
         public Product Product { get; set; }
-
+        public SalesRepository SalesRepository { get; set; }
         public SalesRecord SalesRecord { get; set; }
         public ICollection<Seller> SellerColection { get; set; }
 
@@ -19,7 +19,9 @@ namespace SalesWebMvc.Models.ViewModels
         public ICollection<Product> ProductsColetion { get; set; }
 
         public ICollection<SalesRecord> SalesRecords { get; set; }
-        
+
+        public ICollection<SalesRepository> SalesRepositoryList { get; set; }
+
 
     }
 }

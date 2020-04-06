@@ -6,6 +6,7 @@ using SalesWebMvc.Models;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
+using SalesWebMvc.Services.Exception;
 
 namespace SalesWebMvc.Services
 {
@@ -61,10 +62,30 @@ namespace SalesWebMvc.Services
             _context.Add(salesRecord);
             await _context.SaveChangesAsync();
         }
+       
         public async Task<List<SalesRecord>> FindAllStatusAsync()
-        {
-          
+        {          
             return  await _context.SalesRecord.Where(x => x.Status == Models.Enums.SalesStatus.Pendente).ToListAsync();
+        }
+        public async Task<SalesRecord> FindByIdAsync(int id)
+        {
+            return await _context.SalesRecord.Include(obj => obj.Seller).FirstOrDefaultAsync(x => x.Id == id);
+
+        }
+        public async Task RemoveAsync(int id)
+        {
+            try
+            {
+                var obj = await _context.SalesRecord.FindAsync(id);
+                _context.SalesRecord.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+
+                throw new IntegrityException(e.Message);
+            }
+
         }
 
     }
