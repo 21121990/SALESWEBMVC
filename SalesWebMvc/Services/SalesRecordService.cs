@@ -61,10 +61,10 @@ namespace SalesWebMvc.Services
             _context.Add(salesRecord);
             await _context.SaveChangesAsync();
         }
-        public async Task<List<SalesRecord>> FindAllAsyncDate(DateTime? Date)
+        public async Task<List<SalesRecord>> FindAllStatusAsync()
         {
           
-            return  await _context.SalesRecord.Where(x => x.Date >= Date).ToListAsync();
+            return  await _context.SalesRecord.Where(x => x.Status == Models.Enums.SalesStatus.Pendente).ToListAsync();
         }
 
     }
