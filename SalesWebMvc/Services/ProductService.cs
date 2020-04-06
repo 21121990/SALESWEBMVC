@@ -22,17 +22,15 @@ namespace SalesWebMvc.Services
         }
         public async Task<List<SalesRepository>> FindAllSalesIdAsync(int id)
         {
-            var result = from obj in _context.SalesRepository select obj;
-           
-            //inner join na consulta com include
-            return await result
-                .Include(x => x.ProductId)
-                .Include(x => x.Product.Id)
-                .OrderByDescending(x => x.Product.Name).Where(x => x.Id == id)               
-                .ToListAsync();
 
-           // return await _context.SalesRepository.Include(obj => obj.SalesRecordId == id).ToListAsync();
-           // return await _context.SalesRecord.Include(obj => obj.Seller).FirstOrDefaultAsync(x => x.Id == id);
+            // var salesRespository = await _context.SalesRepository.Include(x => x.SalesRecordId == id).ToListAsync();
+            //var product = await _context.Product.OrderBy(x => x.Name).ToListAsync();
+                       
+            var result = from obj in _context.SalesRepository select obj;
+
+            //inner join na consulta com include
+            return await result.Where(x => x.SalesRecordId == id)
+                 .ToListAsync();
 
         }
     }

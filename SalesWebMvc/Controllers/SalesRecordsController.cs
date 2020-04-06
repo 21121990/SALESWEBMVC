@@ -22,7 +22,7 @@ namespace SalesWebMvc.Controllers
         {
             _salesRecordService = salesRecordService;
             _sellerService = sellerService;
-            _productService = productService;
+            _productService = productService; 
         }
 
         public IActionResult Index()
@@ -133,12 +133,12 @@ namespace SalesWebMvc.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
             var products = await _productService.FindAllAsync();
-            var SalesRepository = await _productService.FindAllSalesIdAsync(Id.Value);
+            var salesRepository = await _productService.FindAllSalesIdAsync(Id.Value);
             if (products == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não existe" });
             }
-            var viewModel = new SellerFormViewModel { ProductsColetion = products };
+            var viewModel = new SellerFormViewModel { ProductsColetion = products, SalesRepositoryList = salesRepository };
             return View(viewModel);
 
         }
