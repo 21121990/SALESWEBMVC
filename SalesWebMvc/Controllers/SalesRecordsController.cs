@@ -144,16 +144,33 @@ namespace SalesWebMvc.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SalesProducts(Product product, int id)
+        public async Task<IActionResult> SalesProducts(Product product, int Id)
         {
+            try
+            {
+                
+                SellerFormViewModel viewModel = new SellerFormViewModel();
+                SalesRepository salesRepository = new SalesRepository();
+                SalesRecord salesRecord = new SalesRecord();
+                salesRepository.SalesRecordId = Id;
+                salesRepository.ProductId = product.Id;
+                salesRecord = await _salesRecordService.FindByIdAsync(Id);
+                await _salesRecordService.InsertSalesRepositoryAsync(salesRepository);
 
-            SellerFormViewModel viewModel = new SellerFormViewModel();
-            SalesRecord sales = new SalesRecord();
-            
-            await _salesRecordService.InsertAsync(sales);
-            viewModel.SalesRecords = await _salesRecordService.FindAllStatusAsync();
-            viewModel.SellerColection = await _sellerService.FindAllAsync();
-            return View(viewModel);
+                //Calcular o total de produtos dentro da venda depois do insert para fazer o update.
+                Double totalSales = await _productService.FindTotalSalesAsync(Id);
+                await _salesRecordService.UpdateTotalSalesAync(totalSales, salesRecord);
+                viewModel.ProductsColetion = await _productService.FindAllAsync();
+                viewModel.SalesRepositoryList = await _productService.FindAllSalesIdAsync(Id);
+                return View(viewModel);
+            }
+            catch (Exception )
+            {
+
+                throw ;
+            }
+
+           
 
         }
     }

@@ -33,5 +33,15 @@ namespace SalesWebMvc.Services
                  .ToListAsync();
 
         }
+        public async Task<double> FindTotalSalesAsync(int id)
+        {
+
+           
+            var result = from obj in _context.SalesRepository select obj;
+
+            //inner join na consulta com include
+            return await result.Where(x => x.SalesRecordId == id).SumAsync(x => x.Product.Value);
+
+        }
     }
 }
