@@ -22,7 +22,7 @@ namespace SalesWebMvc.Controllers
         {
             _salesRecordService = salesRecordService;
             _sellerService = sellerService;
-            _productService = productService; 
+            _productService = productService;
         }
 
         public IActionResult Index()
@@ -84,7 +84,7 @@ namespace SalesWebMvc.Controllers
             viewModel.SalesRecords = await _salesRecordService.FindAllStatusAsync();
             viewModel.SellerColection = await _sellerService.FindAllAsync();
             return View(viewModel);
-            
+
         }
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,11 +134,12 @@ namespace SalesWebMvc.Controllers
             }
             var products = await _productService.FindAllAsync();
             var salesRepository = await _productService.FindAllSalesIdAsync(Id.Value);
+            var salesRecord = await _salesRecordService.FindSellerSalesAsync(Id.Value);
             if (products == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não existe" });
             }
-            var viewModel = new SellerFormViewModel { ProductsColetion = products, SalesRepositoryList = salesRepository };
+            var viewModel = new SellerFormViewModel { ProductsColetion = products, SalesRepositoryList = salesRepository, SalesRecord = salesRecord };
             return View(viewModel);
 
         }
@@ -148,7 +149,7 @@ namespace SalesWebMvc.Controllers
         {
             try
             {
-                
+
                 SellerFormViewModel viewModel = new SellerFormViewModel();
                 SalesRepository salesRepository = new SalesRepository();
                 SalesRecord salesRecord = new SalesRecord();
@@ -162,15 +163,33 @@ namespace SalesWebMvc.Controllers
                 await _salesRecordService.UpdateTotalSalesAync(totalSales, salesRecord);
                 viewModel.ProductsColetion = await _productService.FindAllAsync();
                 viewModel.SalesRepositoryList = await _productService.FindAllSalesIdAsync(Id);
+                viewModel.SalesRecord = await _salesRecordService.FindSellerSalesAsync(Id);
                 return View(viewModel);
             }
-            catch (Exception )
+            catch (Exception)
             {
 
-                throw ;
+                throw;
             }
 
-           
+        }
+        public async Task<IActionResult> DeleteSalesRepository(int Id, int id2)
+        {
+            try
+            {
+                SalesRecord salesRecord = new SalesRecord();
+                salesRecord = await _salesRecordService.FindByIdAsync(id2);
+                await _salesRecordService.RemoveSalesRepositoryAync(Id);
+                Double totalSales = await _productService.FindTotalSalesAsync(id2);
+                await _salesRecordService.UpdateTotalSalesAync(totalSales, salesRecord);
+
+                return RedirectToAction("SalesProducts", "SalesRecords", new { @id = id2 });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
         }
     }

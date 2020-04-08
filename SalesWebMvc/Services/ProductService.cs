@@ -39,7 +39,7 @@ namespace SalesWebMvc.Services
            
             var result = from obj in _context.SalesRepository select obj;
 
-            //inner join na consulta com include
+            //inner join na consulta somando valores
             return await result.Where(x => x.SalesRecordId == id).SumAsync(x => x.Product.Value);
 
         }

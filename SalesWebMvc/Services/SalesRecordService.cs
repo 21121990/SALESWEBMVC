@@ -69,12 +69,22 @@ namespace SalesWebMvc.Services
             _context.Add(salesRepository);
             await _context.SaveChangesAsync();
         }
+        public async Task RemoveSalesRepositoryAync(int Id)
+        {
+            var salesRepository = await _context.SalesRepository.FindAsync(Id);
+            _context.SalesRepository.Remove(salesRepository);
+            await _context.SaveChangesAsync();
+        }
         public async Task UpdateTotalSalesAync(double totalSales, SalesRecord salesRecord)
         {
             //Adicionar o metodo que faz insert de produtos na venda e o valor na venda.
             salesRecord.Amount = totalSales;
             _context.SalesRecord.Update(salesRecord);
             await _context.SaveChangesAsync();
+        }
+        public async Task<SalesRecord> FindSellerSalesAsync(int id)
+        {
+            return await _context.SalesRecord.Include(obj => obj.Seller).FirstOrDefaultAsync(x => x.Id == id);
         }
 
 
