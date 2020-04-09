@@ -60,13 +60,26 @@ namespace SalesWebMvc.Controllers
             var result = await _salesRecordService.FindByDateGroupingAsync(minDate, maxDate);
             return View(result);
         }
-
-        public async Task<IActionResult> SalesControl()
+        public IActionResult Filter(DateTime? minDate, DateTime? maxDate)
         {
+            return RedirectToAction("SalesControl", new { minDate, maxDate });
+        }
 
-            var salesRecord = await _salesRecordService.FindAllStatusAsync();
-            var sellers = await _sellerService.FindAllAsync();
-            var viewModel = new SellerFormViewModel { SellerColection = sellers, SalesRecords = salesRecord };
+        public async Task<IActionResult> SalesControl(DateTime? minDate, DateTime? maxDate)
+        {
+            SellerFormViewModel viewModel = new SellerFormViewModel();
+            if (!minDate.HasValue || !maxDate.HasValue)
+            {
+                viewModel.SalesRecords = await _salesRecordService.FindAllStatusAsync();
+            }
+            if (minDate.HasValue || maxDate.HasValue)
+            {
+                viewModel.SalesRecords = await _salesRecordService.FindByDateAsync(minDate, maxDate);
+                ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+                ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+            }            
+
+           viewModel.SellerColection = await _sellerService.FindAllAsync();
 
             return View(viewModel);
         }
@@ -74,7 +87,7 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SalesControl([Bind("Id,Name")] Seller seller)
         {
-
+            
             SellerFormViewModel viewModel = new SellerFormViewModel();
             SalesRecord sales = new SalesRecord();
             sales.Date = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
@@ -106,6 +119,7 @@ namespace SalesWebMvc.Controllers
         {
             try
             {
+                await _salesRecordService.RemoveSalesRepositoryIdSalesAsync(id);
                 await _salesRecordService.RemoveAsync(id);
                 return RedirectToAction(nameof(SalesControl));
             }
@@ -132,13 +146,16 @@ namespace SalesWebMvc.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
-            var products = await _productService.FindAllAsync();
-            var salesRepository = await _productService.FindAllSalesIdAsync(Id.Value);
             var salesRecord = await _salesRecordService.FindSellerSalesAsync(Id.Value);
-            if (products == null)
+            if (salesRecord == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não existe" });
             }
+            var salesRepository = await _productService.FindAllSalesIdAsync(Id.Value);
+            var products = await _productService.FindAllAsync();
+            Double totalSales = await _productService.FindTotalSalesAsync(Id.Value);
+            ViewData["TotalSales"] = totalSales.ToString(format:"f2");
+            
             var viewModel = new SellerFormViewModel { ProductsColetion = products, SalesRepositoryList = salesRepository, SalesRecord = salesRecord };
             return View(viewModel);
 
@@ -149,7 +166,6 @@ namespace SalesWebMvc.Controllers
         {
             try
             {
-
                 SellerFormViewModel viewModel = new SellerFormViewModel();
                 SalesRepository salesRepository = new SalesRepository();
                 SalesRecord salesRecord = new SalesRecord();
@@ -160,6 +176,7 @@ namespace SalesWebMvc.Controllers
 
                 //Calcular o total de produtos dentro da venda depois do insert para fazer o update.
                 Double totalSales = await _productService.FindTotalSalesAsync(Id);
+                ViewData["TotalSales"] = totalSales.ToString(format:"f2");
                 await _salesRecordService.UpdateTotalSalesAync(totalSales, salesRecord);
                 viewModel.ProductsColetion = await _productService.FindAllAsync();
                 viewModel.SalesRepositoryList = await _productService.FindAllSalesIdAsync(Id);
@@ -179,7 +196,7 @@ namespace SalesWebMvc.Controllers
             {
                 SalesRecord salesRecord = new SalesRecord();
                 salesRecord = await _salesRecordService.FindByIdAsync(id2);
-                await _salesRecordService.RemoveSalesRepositoryAync(Id);
+                await _salesRecordService.RemoveSalesRepositoryIdProductAsync(Id);
                 Double totalSales = await _productService.FindTotalSalesAsync(id2);
                 await _salesRecordService.UpdateTotalSalesAync(totalSales, salesRecord);
 

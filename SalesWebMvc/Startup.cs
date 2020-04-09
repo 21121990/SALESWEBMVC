@@ -85,7 +85,7 @@ builder.MigrationsAssembly("SalesWebMvc")));
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}/{id2?}");
+                    template: "{controller=SalesRecords}/{action=SalesControl}/{id?}/{id2?}");
             });
         }
     }

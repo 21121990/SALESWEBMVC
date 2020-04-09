@@ -69,10 +69,21 @@ namespace SalesWebMvc.Services
             _context.Add(salesRepository);
             await _context.SaveChangesAsync();
         }
-        public async Task RemoveSalesRepositoryAync(int Id)
+        public async Task RemoveSalesRepositoryIdProductAsync(int Id)
         {
             var salesRepository = await _context.SalesRepository.FindAsync(Id);
             _context.SalesRepository.Remove(salesRepository);
+            await _context.SaveChangesAsync();
+        }
+        public async Task RemoveSalesRepositoryIdSalesAsync(int Id)
+        {
+            var salesRepository = await _context.SalesRepository.Where(x=>x.SalesRecordId == Id).ToListAsync();
+
+            foreach (var item in salesRepository)
+            {
+                _context.SalesRepository.Remove(item);
+            }                    
+            
             await _context.SaveChangesAsync();
         }
         public async Task UpdateTotalSalesAync(double totalSales, SalesRecord salesRecord)
