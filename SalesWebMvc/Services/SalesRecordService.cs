@@ -65,7 +65,7 @@ namespace SalesWebMvc.Services
         public async Task InsertSalesRepositoryAsync(SalesRepository salesRepository)
         {
             //Adicionar o metodo que faz insert de produtos na venda e o valor na venda.
-            
+
             _context.Add(salesRepository);
             await _context.SaveChangesAsync();
         }
@@ -77,19 +77,24 @@ namespace SalesWebMvc.Services
         }
         public async Task RemoveSalesRepositoryIdSalesAsync(int Id)
         {
-            var salesRepository = await _context.SalesRepository.Where(x=>x.SalesRecordId == Id).ToListAsync();
+            var salesRepository = await _context.SalesRepository.Where(x => x.SalesRecordId == Id).ToListAsync();
 
             foreach (var item in salesRepository)
             {
                 _context.SalesRepository.Remove(item);
-            }                    
-            
+            }
+
             await _context.SaveChangesAsync();
         }
-        public async Task UpdateTotalSalesAync(double totalSales, SalesRecord salesRecord)
+        public async Task UpdateTotalSalesAsync(double totalSales, SalesRecord salesRecord)
         {
             //Adicionar o metodo que faz insert de produtos na venda e o valor na venda.
             salesRecord.Amount = totalSales;
+            _context.SalesRecord.Update(salesRecord);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateStatusAsync(SalesRecord salesRecord)
+        {
             _context.SalesRecord.Update(salesRecord);
             await _context.SaveChangesAsync();
         }
@@ -98,10 +103,9 @@ namespace SalesWebMvc.Services
             return await _context.SalesRecord.Include(obj => obj.Seller).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-
         public async Task<List<SalesRecord>> FindAllStatusAsync()
-        {          
-            return  await _context.SalesRecord.Where(x => x.Status == Models.Enums.SalesStatus.Pendente).ToListAsync();
+        {
+            return await _context.SalesRecord.Where(x => x.Status == Models.Enums.SalesStatus.Pendente).ToListAsync();
         }
         public async Task<SalesRecord> FindByIdAsync(int id)
         {

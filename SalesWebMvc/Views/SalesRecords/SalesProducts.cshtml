@@ -11,25 +11,62 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="SalesProducts">
-
             <div class="form-group">
                 <label asp-for="Product.Id" class="control-label">Produtos</label>
                 <select asp-for="Product.Id" asp-items="@(new SelectList(Model.ProductsColetion, "Id","Name"));" class="form-control"></select>
             </div>
-
-            <div class="form-group">
+            <div>
                 <input type="submit" value="Adicionar" class="btn btn-default" />
             </div>
             <label class="control-label">Vendedor(a): @Model.SalesRecord.Seller.Name</label>
         </form>
+
+        <form asp-action="UpdateStatus" style="position:relative; left:200%; top:-155px;">
+            <div class="form-group">
+                <input type="hidden" asp-for="SalesRecord.Id">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="salesStatus" name="salesStatus" class="form-control">
+                    @if (Model.SalesRecord.Status == SalesWebMvc.Models.Enums.SalesStatus.Pendente)
+                    {
+                        <option value="0">@Model.SalesRecord.Status</option>
+                        <option value="1">Faturado</option>
+                        <option value="2">Cancelado</option>
+                    }
+                    @if (Model.SalesRecord.Status == SalesWebMvc.Models.Enums.SalesStatus.Faturado)
+                    {
+                        <option value="1">@Model.SalesRecord.Status</option>
+                        <option value="0">Pendente</option>
+                        <option value="2">Cancelado</option>
+                    }
+                    @if (Model.SalesRecord.Status == SalesWebMvc.Models.Enums.SalesStatus.Cancelado)
+                    {
+
+                        <option value="2">@Model.SalesRecord.Status</option>
+                        <option value="0">Pendente</option>
+                        <option value="1">Faturado</option>
+                    }
+
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Atualizar Status" class="btn btn-default" />
+            </div>
+        </form>
+
     </div>
 </div>
+<div>
 
-<div class="panel panel-primary">
+
+</div>
+
+<div class="panel panel-primary" style="margin-top:-50px;">
     <div class="panel-heading">
-       
-            <h3 class="panel-title">Total de produtos - @ViewData["TotalSales"]</h3>
-       
+
+        <h3 class="panel-title">Total de produtos - R$: @ViewData["TotalSales"]</h3>
+
     </div>
     @if (Model.SalesRepositoryList != null)
     {
@@ -43,7 +80,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.SalesRepository.Product.Value)
                         </th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
@@ -55,7 +92,7 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Product.Value)
-                            </td>                           
+                            </td>
                             <td>
                                 <a asp-action="DeleteSalesRepository" asp-route-id="@item.Id" asp-route-id2="@item.SalesRecordId">Remover</a>
                             </td>
