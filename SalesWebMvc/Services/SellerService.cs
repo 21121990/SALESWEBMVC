@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
-using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Services.Exception;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SalesWebMvc.Services
 {
@@ -46,9 +43,9 @@ namespace SalesWebMvc.Services
             catch (DbUpdateException)
             {
 
-                throw new IntegrityException ("Não é possível excluir um vendedor que possui vendas");
+                throw new IntegrityException("Não é possível excluir um vendedor que possui vendas");
             }
-            
+
         }
         public async Task UpdateAsync(Seller obj)
         {
@@ -60,7 +57,7 @@ namespace SalesWebMvc.Services
             try
             {
                 _context.Update(obj);
-               await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbConcurrencyException e)
             {

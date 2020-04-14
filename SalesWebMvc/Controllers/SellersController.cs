@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using SalesWebMvc.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
+using SalesWebMvc.Services;
 using SalesWebMvc.Services.Exception;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 
 namespace SalesWebMvc.Controllers
@@ -76,7 +75,7 @@ namespace SalesWebMvc.Controllers
 
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-           
+
         }
 
         public async Task<IActionResult> Details(int? id)

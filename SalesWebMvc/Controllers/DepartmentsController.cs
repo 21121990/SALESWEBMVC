@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Models;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SalesWebMvc.Models;
-using SalesWebMvc.Services.Exception;
 
 namespace SalesWebMvc.Controllers
 {
@@ -150,9 +146,9 @@ namespace SalesWebMvc.Controllers
             catch (DbUpdateException)
             {
 
-                return RedirectToAction(nameof(Error), new { message = "Não é possível deletar um departamento que possui relacionamento"});
+                return RedirectToAction(nameof(Error), new { message = "Não é possível deletar um departamento que possui relacionamento" });
             }
-           
+
         }
 
         private bool DepartmentExists(int id)

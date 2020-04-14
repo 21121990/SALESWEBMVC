@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SalesWebMvc.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebMvc.Services
 {
@@ -25,7 +24,7 @@ namespace SalesWebMvc.Services
 
             // var salesRespository = await _context.SalesRepository.Include(x => x.SalesRecordId == id).ToListAsync();
             //var product = await _context.Product.OrderBy(x => x.Name).ToListAsync();
-                       
+
             var result = from obj in _context.SalesRepository select obj;
 
             //inner join na consulta com include
@@ -36,7 +35,7 @@ namespace SalesWebMvc.Services
         public async Task<double> FindTotalSalesAsync(int id)
         {
 
-           
+
             var result = from obj in _context.SalesRepository select obj;
 
             //inner join na consulta somando valores

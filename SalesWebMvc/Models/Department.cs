@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SalesWebMvc.Models
 {
@@ -10,7 +9,7 @@ namespace SalesWebMvc.Models
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Campo {0} Obrigatório")]
-        [Display(Name= "Nome")]
+        [Display(Name = "Nome")]
         public string Name { get; set; }
         public ICollection<Seller> Sellers { get; set; } = new List<Seller>();
 
@@ -31,7 +30,7 @@ namespace SalesWebMvc.Models
 
         public double TotalSales(DateTime inicial, DateTime final)
         {
-            return Sellers.Sum(seller => seller.TotalSales(inicial,final));
+            return Sellers.Sum(seller => seller.TotalSales(inicial, final));
         }
     }
 }

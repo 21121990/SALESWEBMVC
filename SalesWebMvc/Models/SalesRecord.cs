@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SalesWebMvc.Models.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
-using SalesWebMvc.Models.Enums;
 
 namespace SalesWebMvc.Models
 {
@@ -8,17 +8,17 @@ namespace SalesWebMvc.Models
     {
         public int Id { get; set; }
 
-        [Display(Name ="Data")]
+        [Display(Name = "Data")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Date { get; set; }
 
-        [Display(Name ="Valor")]
-        [DisplayFormat(DataFormatString ="{0:f2}")]
+        [Display(Name = "Valor")]
+        [DisplayFormat(DataFormatString = "{0:f2}")]
         public double Amount { get; set; }
-        public SalesStatus Status  { get; set; }
+        public SalesStatus Status { get; set; }
 
-        [Display(Name ="Vendedor")]
+        [Display(Name = "Vendedor")]
         public Seller Seller { get; set; }
 
         public int SellerId { get; set; }
@@ -44,5 +44,5 @@ namespace SalesWebMvc.Models
             Seller = seller;
         }
     }
-   
+
 }

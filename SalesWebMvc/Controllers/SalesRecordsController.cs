@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.Enums;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
-using SalesWebMvc.Data;
-using System.Diagnostics;
 using SalesWebMvc.Services.Exception;
-using SalesWebMvc.Models.Enums;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SalesWebMvc.Controllers
 {
@@ -71,7 +68,7 @@ namespace SalesWebMvc.Controllers
             {
                 return RedirectToAction("SalesControl");
             }
-            
+
         }
 
         public async Task<IActionResult> SalesControl(DateTime? minDate, DateTime? maxDate)
@@ -86,9 +83,9 @@ namespace SalesWebMvc.Controllers
                 viewModel.SalesRecords = await _salesRecordService.FindByDateAsync(minDate, maxDate);
                 ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
                 ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
-            }            
+            }
 
-           viewModel.SellerColection = await _sellerService.FindAllAsync();
+            viewModel.SellerColection = await _sellerService.FindAllAsync();
 
             return View(viewModel);
         }
@@ -96,7 +93,7 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SalesControl([Bind("Id,Name")] Seller seller)
         {
-            
+
             SellerFormViewModel viewModel = new SellerFormViewModel();
             SalesRecord sales = new SalesRecord();
             sales.Date = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
@@ -163,7 +160,7 @@ namespace SalesWebMvc.Controllers
             var salesRepository = await _productService.FindAllSalesIdAsync(Id.Value);
             var products = await _productService.FindAllAsync();
             Double totalSales = await _productService.FindTotalSalesAsync(Id.Value);
-            ViewData["TotalSales"] = totalSales.ToString(format:"f2");
+            ViewData["TotalSales"] = totalSales.ToString(format: "f2");
             var viewModel = new SellerFormViewModel { ProductsColetion = products, SalesRepositoryList = salesRepository, SalesRecord = salesRecord };
             return View(viewModel);
 
@@ -184,7 +181,7 @@ namespace SalesWebMvc.Controllers
 
                 //Calcular o total de produtos dentro da venda depois do insert para fazer o update.
                 Double totalSales = await _productService.FindTotalSalesAsync(Id);
-                ViewData["TotalSales"] = totalSales.ToString(format:"f2");
+                ViewData["TotalSales"] = totalSales.ToString(format: "f2");
                 await _salesRecordService.UpdateTotalSalesAsync(totalSales, salesRecord);
                 viewModel.ProductsColetion = await _productService.FindAllAsync();
                 viewModel.SalesRepositoryList = await _productService.FindAllSalesIdAsync(Id);
@@ -226,7 +223,7 @@ namespace SalesWebMvc.Controllers
                 {
                     status = SalesStatus.Pendente;
                 }
-                else if(salesStatus == 1)
+                else if (salesStatus == 1)
                 {
                     status = SalesStatus.Faturado;
                 }
