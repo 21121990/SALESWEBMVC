@@ -3,6 +3,7 @@ using SalesWebMvc.Models;
 using SalesWebMvc.Services.Exception;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SalesWebMvc.Services
 {
@@ -18,7 +19,9 @@ namespace SalesWebMvc.Services
 
         public async Task<List<Seller>> FindAllAsync()
         {
-            return await _context.Seller.ToListAsync();
+            var result = from obj in _context.Seller select obj;
+            
+            return await result.OrderBy(x => x.Name).ToListAsync();
         }
 
         public async Task InsertAsync(Seller obj)

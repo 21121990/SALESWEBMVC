@@ -30,7 +30,7 @@ namespace SalesWebMvc.Models
 
         public double TotalSales(DateTime inicial, DateTime final)
         {
-            return Sellers.Sum(seller => seller.TotalSales(inicial, final));
+            return Sellers.Sum(seller => seller.TotalSales(inicial.Date, final.Date));
         }
     }
 }

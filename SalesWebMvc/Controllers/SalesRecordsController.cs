@@ -93,16 +93,24 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SalesControl([Bind("Id,Name")] Seller seller)
         {
+            try
+            {
+                SellerFormViewModel viewModel = new SellerFormViewModel();
+                SalesRecord sales = new SalesRecord();
+                sales.Date = Convert.ToDateTime(DateTime.Now);
+                sales.SellerId = seller.Id;
+                sales.Status = Models.Enums.SalesStatus.Pendente;
+                await _salesRecordService.InsertAsync(sales);
+                viewModel.SalesRecords = await _salesRecordService.FindAllStatusAsync();
+                viewModel.SellerColection = await _sellerService.FindAllAsync();
+                return View(viewModel);
+            }
+            catch (Exception e)
+            {
 
-            SellerFormViewModel viewModel = new SellerFormViewModel();
-            SalesRecord sales = new SalesRecord();
-            sales.Date = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
-            sales.SellerId = seller.Id;
-            sales.Status = Models.Enums.SalesStatus.Pendente;
-            await _salesRecordService.InsertAsync(sales);
-            viewModel.SalesRecords = await _salesRecordService.FindAllStatusAsync();
-            viewModel.SellerColection = await _sellerService.FindAllAsync();
-            return View(viewModel);
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+           
 
         }
         public async Task<IActionResult> Delete(int? id)

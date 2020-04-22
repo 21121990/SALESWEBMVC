@@ -22,11 +22,11 @@ namespace SalesWebMvc.Services
             var result = from obj in _context.SalesRecord select obj;
             if (minDate.HasValue)
             {
-                result = result.Where(x => x.Date >= minDate.Value);
+                result = result.Where(x => x.Date.Date >= minDate.Value.Date);
             }
             if (maxDate.HasValue)
             {
-                result = result.Where(x => x.Date <= maxDate.Value);
+                result = result.Where(x => x.Date.Date <= maxDate.Value.Date);
             }
             //inner join na consulta com include
             return await result
@@ -41,11 +41,11 @@ namespace SalesWebMvc.Services
             var result = from obj in _context.SalesRecord select obj;
             if (minDate.HasValue)
             {
-                result = result.Where(x => x.Date >= minDate.Value);
+                result = result.Where(x => x.Date.Date >= minDate.Value.Date);
             }
             if (maxDate.HasValue)
             {
-                result = result.Where(x => x.Date <= maxDate.Value);
+                result = result.Where(x => x.Date.Date <= maxDate.Value.Date);
             }
             //inner join na consulta com include
             return await result
