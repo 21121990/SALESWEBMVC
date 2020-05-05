@@ -10,33 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200328212939_Initial.cs" />
-    <Compile Remove="Migrations\20200328212939_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200403214636_createProductEnties.cs" />
-    <Compile Remove="Migrations\20200403214636_createProductEnties.Designer.cs" />
-    <Compile Remove="Migrations\20200404133223_SalesRepository.cs" />
-    <Compile Remove="Migrations\20200404133223_SalesRepository.Designer.cs" />
-    <Compile Remove="Migrations\20200404134001_ModificandoSalesRepository.cs" />
-    <Compile Remove="Migrations\20200404134001_ModificandoSalesRepository.Designer.cs" />
-    <Compile Remove="Migrations\20200411212609_migration.cs" />
-    <Compile Remove="Migrations\20200411212609_migration.Designer.cs" />
-    <Compile Remove="Migrations\20200411215728_MIGRATION2.cs" />
-    <Compile Remove="Migrations\20200411215728_MIGRATION2.Designer.cs" />
-    <Compile Remove="Migrations\20200412003151_final.cs" />
-    <Compile Remove="Migrations\20200412003151_final.Designer.cs" />
-    <Compile Remove="Migrations\20200412003416_Final1.cs" />
-    <Compile Remove="Migrations\20200412003416_Final1.Designer.cs" />
-    <Compile Remove="Migrations\SalesWebMvcContextModelSnapshot.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

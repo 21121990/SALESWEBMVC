@@ -10,8 +10,8 @@ using SalesWebMvc.Models;
 namespace SalesWebMvc.Migrations
 {
     [DbContext(typeof(SalesWebMvcContext))]
-    [Migration("20200412012846_Initial")]
-    partial class Initial
+    [Migration("20200504193143_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -113,6 +113,23 @@ namespace SalesWebMvc.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Seller");
+                });
+
+            modelBuilder.Entity("SalesWebMvc.Models.User", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("email")
+                        .IsRequired();
+
+                    b.Property<string>("password")
+                        .IsRequired();
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SalesWebMvc.Models.SalesRecord", b =>

@@ -44,6 +44,7 @@ builder.MigrationsAssembly("SalesWebMvc")));
             services.AddScoped<SalesRecordService>();
             services.AddScoped<ProductService>();
             services.AddScoped<SalesRepository>();
+            services.AddScoped<UserService>();
 
         }
 

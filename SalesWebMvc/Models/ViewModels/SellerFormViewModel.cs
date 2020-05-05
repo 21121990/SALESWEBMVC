@@ -4,10 +4,14 @@ namespace SalesWebMvc.Models.ViewModels
 {
     public class SellerFormViewModel
     {
+        public User User { get; set; }
         public Seller Seller { get; set; }
         public Product Product { get; set; }
         public SalesRepository SalesRepository { get; set; }
         public SalesRecord SalesRecord { get; set; }
+
+        public ICollection<User> UserColection { get; set; }
+
         public ICollection<Seller> SellerColection { get; set; }
 
         public ICollection<Department> Departments { get; set; }
