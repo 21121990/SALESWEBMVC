@@ -41,8 +41,15 @@
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
+    @if (ViewBag("UserSession") == null)
+    {
 
+    }
+    @if (ViewBag("UserSession") != null)
+    {
+        <partial name="_CookieConsentPartial" />
+    }
+    
     <div class="container body-content">
         @RenderBody()
         <hr />

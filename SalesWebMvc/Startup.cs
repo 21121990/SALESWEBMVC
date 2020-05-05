@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SalesWebMvc.Data;
 using SalesWebMvc.Models;
 using SalesWebMvc.Services;
+using System;
 
 namespace SalesWebMvc
 {
@@ -33,6 +34,7 @@ namespace SalesWebMvc
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSession(options=> { options.IdleTimeout = TimeSpan.FromSeconds(10); });
 
             services.AddDbContext<SalesWebMvcContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SalesWebMvcContext"), builder =>
@@ -75,12 +77,13 @@ builder.MigrationsAssembly("SalesWebMvc")));
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=SalesRecords}/{action=SalesControl}/{id?}/{id2?}");
+                    template: "{controller=Login}/{action=Login}/{id?}/{id2?}");
             });
         }
     }

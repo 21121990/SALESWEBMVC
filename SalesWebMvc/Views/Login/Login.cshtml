@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<div class="container">
+    <hr>
+    <div class="card mt-5">
+        <div class="card-header">
+            <h2> Login </h2>
+        </div>
+        <div class="card-body">
+            <form asp-action="Login">
+
+                <input class="form-control" name="email" type="email" placeholder="email@exmplo.com">
+                <br>
+                <input class="form-control" name="password" type="password" placeholder="Senha">
+                <br>
+                <button type="submit" class="btn btn-primary btn-block">Logar</button>
+            </form>
+        </div>
+    </div>
+</div>

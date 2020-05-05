@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
@@ -18,19 +19,35 @@ namespace SalesWebMvc.Controllers
         {
             _userService = userService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index ()
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            ViewBag("UserSession",Session);
+            if(Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             var list = await _userService.FindAllAsync();
             return View(list);
         }
         public IActionResult Create()
-        {           
+        {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(User user)
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (!ModelState.IsValid)
             {
                 var users = await _userService.FindAllAsync();
@@ -43,6 +60,11 @@ namespace SalesWebMvc.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
@@ -59,6 +81,11 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 await _userService.RemoveAsync(id);
@@ -74,6 +101,11 @@ namespace SalesWebMvc.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { Message = "Id not provided" });
@@ -87,6 +119,11 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> Edit(int? id)
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { Message = "Id not provided" });
@@ -103,8 +140,13 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, User user)
         {
+            var Session = HttpContext.Session.GetString("SessionUser");
+            if (Session == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (!ModelState.IsValid)
-            {                
+            {
                 var viewModel = new SellerFormViewModel { User = user };
                 return View(viewModel);
             }

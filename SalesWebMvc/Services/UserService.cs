@@ -16,6 +16,12 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
+        public async Task<User> FindOneAsync(string email)
+        {
+ 
+            return await _context.User.FirstOrDefaultAsync(x => x.email == email);
+
+        }
         public async Task<List<User>> FindAllAsync()
         {
             var result = from obj in _context.User select obj;
