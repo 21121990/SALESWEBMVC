@@ -1,25 +1,24 @@
-﻿
-@{
-    ViewData["Title"] = "Login";
+﻿@model SalesWebMvc.Models.User
+
+@{ 
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
-<h2>Login</h2>
-
-<div class="container">
     <hr>
-    <div class="card mt-5">
-        <div class="card-header">
-            <h2> Login </h2>
-        </div>
-        <div class="card-body">
-            <form asp-action="Login">
+    <div class="container">
+        
+        <div class="card col-md-4"  style="position:relative;left:340px;">
+            <div class="card-header">
+                <h2> Login </h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="Login">
 
-                <input class="form-control" name="email" type="email" placeholder="email@exmplo.com">
-                <br>
-                <input class="form-control" name="password" type="password" placeholder="Senha">
-                <br>
-                <button type="submit" class="btn btn-primary btn-block">Logar</button>
-            </form>
+                    <input class="form-control" name="email" type="email" placeholder="email@exmplo.com">
+                    <br>
+                    <input class="form-control" name="password" type="password" placeholder="Senha">
+                    <br>
+                    <button type="submit" class="btn btn-primary btn-block">Logar</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>

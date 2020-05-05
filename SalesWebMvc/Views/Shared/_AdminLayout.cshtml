@@ -15,47 +15,23 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <style>
+        body{
+           background-image:url('/images/img.jpg');
+           background-attachment:fixed;
+           background-size:100%;
+           background-repeat:no-repeat;
+           background-color:black;
+        }
+    </style>
 </head>
-<style>
-    body {
-        background-image: url('/images/img.jpg');
-        background-attachment: fixed;
-        background-size: 100%;
-        background-repeat: no-repeat;
-        background-color: black;
-    }
-</style>
 <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="SalesRecords" asp-action="SalesControl" class="navbar-brand">DVS</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="SalesRecords" asp-action="SalesControl">Controle de vendas</a></li>
-                    <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departamento</a></li>
-                    <li><a asp-area="" asp-controller="Products" asp-action="Index">Produto</a></li>
-                    <li><a asp-area="" asp-controller="Sellers" asp-action="Index">Vendedor</a></li>
-                    <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuários</a></li>
-                    <li><a asp-area="" asp-controller="SalesRecords" asp-action="Index">Vendas</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
 
     <partial name="_CookieConsentPartial" />
 
 
     <div class="container body-content">
+
         @RenderBody()
         <hr />
         <footer>

@@ -27,7 +27,7 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(User user)
         {
-            var result = await _userService.FindOneAsync(user.email);
+            var result = await _userService.FindOneAsync(user.email, user.password);
 
             if (result == null)
             {
@@ -36,7 +36,8 @@ namespace SalesWebMvc.Controllers
             }
             else
             {
-                HttpContext.Session.SetString("SessionUser", user.email);
+                
+                HttpContext.Session.SetString("SessionUser", user.email);               
                 return RedirectToAction("SalesControl", "SalesRecords");
             }
             

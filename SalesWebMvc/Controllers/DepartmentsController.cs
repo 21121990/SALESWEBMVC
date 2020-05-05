@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
 using System.Diagnostics;
@@ -19,12 +20,20 @@ namespace SalesWebMvc.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View(await _context.Department.ToListAsync());
         }
 
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -43,6 +52,10 @@ namespace SalesWebMvc.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
@@ -53,6 +66,10 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Department department)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(department);
@@ -65,6 +82,10 @@ namespace SalesWebMvc.Controllers
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -85,6 +106,10 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Department department)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id != department.Id)
             {
                 return NotFound();
@@ -116,6 +141,10 @@ namespace SalesWebMvc.Controllers
         // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -136,6 +165,10 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 var department = await _context.Department.FindAsync(id);

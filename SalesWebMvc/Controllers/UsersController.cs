@@ -19,11 +19,10 @@ namespace SalesWebMvc.Controllers
         {
             _userService = userService;
         }
-        public async Task<IActionResult> Index ()
-        {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            ViewBag("UserSession",Session);
-            if(Session == null)
+        public async Task<IActionResult> Index  ()
+        {         
+            
+            if (HttpContext.Session.GetString("SessionUser")==null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -32,8 +31,8 @@ namespace SalesWebMvc.Controllers
         }
         public IActionResult Create()
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+           
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -43,8 +42,8 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(User user)
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+         
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -60,8 +59,8 @@ namespace SalesWebMvc.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+            
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -81,8 +80,8 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+         
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -101,8 +100,8 @@ namespace SalesWebMvc.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+            
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -119,8 +118,8 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> Edit(int? id)
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+           
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
@@ -140,8 +139,8 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, User user)
         {
-            var Session = HttpContext.Session.GetString("SessionUser");
-            if (Session == null)
+     
+            if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }

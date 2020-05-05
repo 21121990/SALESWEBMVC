@@ -16,10 +16,10 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
-        public async Task<User> FindOneAsync(string email)
+        public async Task<User> FindOneAsync(string email, string password)
         {
  
-            return await _context.User.FirstOrDefaultAsync(x => x.email == email);
+            return await _context.User.FirstOrDefaultAsync(x => x.email == email && x.password == password);
 
         }
         public async Task<List<User>> FindAllAsync()

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.Enums;
 using SalesWebMvc.Models.ViewModels;
@@ -25,11 +26,19 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             return View();
         }
 
         public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (!minDate.HasValue)
             {
                 minDate = new DateTime(DateTime.Now.Year, 1, 1);
@@ -45,6 +54,10 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> GroupingSearch(DateTime? minDate, DateTime? maxDate)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (!minDate.HasValue)
             {
                 minDate = new DateTime(DateTime.Now.Year, 1, 1);
@@ -60,6 +73,10 @@ namespace SalesWebMvc.Controllers
         }
         public IActionResult Filter(DateTime? minDate, DateTime? maxDate)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (minDate.HasValue && maxDate.HasValue)
             {
                 return RedirectToAction("SalesControl", new { minDate, maxDate });
@@ -73,6 +90,10 @@ namespace SalesWebMvc.Controllers
 
         public async Task<IActionResult> SalesControl(DateTime? minDate, DateTime? maxDate)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             SellerFormViewModel viewModel = new SellerFormViewModel();
             if (!minDate.HasValue || !maxDate.HasValue)
             {
@@ -93,6 +114,10 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SalesControl([Bind("Id,Name")] Seller seller)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 SellerFormViewModel viewModel = new SellerFormViewModel();
@@ -115,6 +140,10 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
@@ -131,6 +160,10 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 await _salesRecordService.RemoveSalesRepositoryIdSalesAsync(id);
@@ -156,6 +189,10 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> SalesProducts(int? Id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             if (Id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
@@ -177,6 +214,10 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SalesProducts(Product product, int Id)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 SellerFormViewModel viewModel = new SellerFormViewModel();
@@ -205,6 +246,10 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> DeleteSalesRepository(int Id, int id2)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 SalesRecord salesRecord = new SalesRecord();
@@ -224,6 +269,10 @@ namespace SalesWebMvc.Controllers
         }
         public async Task<IActionResult> UpdateStatus(SalesRecord salesRecord, int salesStatus)
         {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
             try
             {
                 var status = SalesStatus.Pendente;
