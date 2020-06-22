@@ -2,22 +2,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SalesWebMvc.Controllers
 {
+    
     public class ProductsController : Controller
     {
+       
         private readonly SalesWebMvcContext _context;
 
         public ProductsController(SalesWebMvcContext context)
         {
             _context = context;
         }
-
+        
         // GET: product
+      
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("SessionUser") == null)
