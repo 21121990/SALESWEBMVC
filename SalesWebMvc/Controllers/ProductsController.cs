@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
+using SalesWebMvc.Models.ViewModels;
+using SalesWebMvc.Services;
+using SalesWebMvc.Services.Exception;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,136 +17,56 @@ namespace SalesWebMvc.Controllers
     public class ProductsController : Controller
     {
        
-        private readonly SalesWebMvcContext _context;
+        private readonly ProductService _productService;
+        private readonly CategoryService _categoryService;
 
-        public ProductsController(SalesWebMvcContext context)
+        public ProductsController(ProductService productService, CategoryService categoryService)
         {
-            _context = context;
+          
+            _productService = productService;
+            _categoryService = categoryService;
         }
-        
+
         // GET: product
-      
+
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
-            return View(await _context.Product.ToListAsync());
+            var list = await _productService.FindAllAsync();
+            return View(list);
         }
 
-        // GET: product/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Create()
         {
             if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Product
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
+            var category = await _categoryService.FindAllAsync();
+            var viewModel = new SellerFormViewModel { Categories = category };
+            return View(viewModel);
         }
-
-        // GET: product/Create
-        public IActionResult Create()
-        {
-            if (HttpContext.Session.GetString("SessionUser") == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
-            return View();
-        }
-
-        // POST: product/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Situation,Value")] Product product)
+        public async Task<IActionResult> Create(Product product)
         {
             if (HttpContext.Session.GetString("SessionUser") == null)
             {
                 return RedirectToAction("Login", "Login");
             }
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var category = await _categoryService.FindAllAsync();
+                var viewModel = new SellerFormViewModel { Product = product, Categories = category };
+                return View(viewModel);
             }
-            return View(product);
+            await _productService.InsertAsync(product);
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: product/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (HttpContext.Session.GetString("SessionUser") == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
-        }
-
-        // POST: Product/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Situation,Value")] Product product)
-        {
-            if (HttpContext.Session.GetString("SessionUser") == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(product);
-        }
-
-        // GET: product/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (HttpContext.Session.GetString("SessionUser") == null)
@@ -151,23 +75,19 @@ namespace SalesWebMvc.Controllers
             }
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
-
-            var product = await _context.Product
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var obj = await _productService.FindByIdAsync(id.Value);
+            if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
             }
-
-            return View(product);
+            return View(obj);
         }
 
-        // POST: product/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (HttpContext.Session.GetString("SessionUser") == null)
             {
@@ -175,24 +95,84 @@ namespace SalesWebMvc.Controllers
             }
             try
             {
-                var product = await _context.Product.FindAsync(id);
-                _context.Product.Remove(product);
-                await _context.SaveChangesAsync();
+                await _productService.RemoveAsync(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException)
+            catch (IntegrityException e)
             {
 
-                return RedirectToAction(nameof(Error), new { message = "Não é possível deletar um produto que possui relacionamento" });
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
 
         }
 
-        private bool ProductExists(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { Message = "Id não fornecido" });
+            }
+            var obj = await _productService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { Message = "Id não encontrado" });
+            }
+            return View(obj);
+        }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { Message = "Id não fornecido" });
+            }
+            var obj = await _productService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { Message = "Id não encotrado" });
+            }
+            List<Category> categories = await _categoryService.FindAllAsync();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Product = obj, Categories = categories };
+            return View(viewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Product product)
+        {
+            if (HttpContext.Session.GetString("SessionUser") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            if (!ModelState.IsValid)
+            {
+                var categories = await _categoryService.FindAllAsync();
+                var viewModel = new SellerFormViewModel { Product = product, Categories = categories };
+                return View(viewModel);
+            }
+            if (id != product.Id)
+            {
+                return RedirectToAction(nameof(Error), new { Message = "Id não encotrado" });
+            }
+            try
+            {
+                await _productService.UpdateAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException e)
+            {
+
+                return RedirectToAction(nameof(Error), new { Message = e.Message });
+            }
+
+        }
         public IActionResult Error(string message)
         {
             var viewModel = new ErrorViewModel

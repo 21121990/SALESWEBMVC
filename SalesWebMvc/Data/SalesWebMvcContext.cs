@@ -15,6 +15,7 @@ namespace SalesWebMvc.Models
         public DbSet<Product> Product { get; set; }
         public DbSet<SalesRepository> SalesRepository { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Category> Category { get; set; }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
+using SalesWebMvc.Services.Exception;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,6 +41,50 @@ namespace SalesWebMvc.Services
 
             //inner join na consulta somando valores
             return await result.Where(x => x.SalesRecordId == id).SumAsync(x => x.Product.Value);
+
+        }
+        public async Task InsertAsync(Product obj)
+        {
+            _context.Add(obj);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<Product> FindByIdAsync(int id)
+        {
+            return await _context.Product.Include(obj => obj.Category).FirstOrDefaultAsync(x => x.Id == id);
+
+        }
+        public async Task RemoveAsync(int id)
+        {
+            try
+            {
+                var obj = await _context.Product.FindAsync(id);
+                _context.Product.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+
+                throw new IntegrityException("Não é possível excluir um produto que possui vendas");
+            }
+
+        }
+        public async Task UpdateAsync(Product obj)
+        {
+            bool hasAny = await _context.Product.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)
+            {
+                throw new NotFoundException("Id não encontrado");
+            }
+            try
+            {
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbConcurrencyException e)
+            {
+
+                throw new DbConcurrencyException(e.Message);
+            }
 
         }
     }

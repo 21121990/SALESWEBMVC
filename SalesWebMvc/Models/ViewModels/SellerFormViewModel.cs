@@ -22,6 +22,8 @@ namespace SalesWebMvc.Models.ViewModels
 
         public ICollection<SalesRepository> SalesRepositoryList { get; set; }
 
+        public ICollection<Category> Categories { get; set; }
+
 
     }
 }
