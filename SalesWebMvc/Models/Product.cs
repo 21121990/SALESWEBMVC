@@ -9,8 +9,12 @@ namespace SalesWebMvc.Models
         [Display(Name = "Nome")]
         public string Name { get; set; }
 
+        [Display(Name= "Ativo")]
+        public bool Situation { get; set; }
+
         [Required]
         [Display(Name = "Valor")]
+        [DisplayFormat(DataFormatString = "{0:f2}")]
         public double Value { get; set; }
 
 
@@ -18,10 +22,11 @@ namespace SalesWebMvc.Models
         {
 
         }
-        public Product(int id, string name, double value)
+        public Product(int id, string name, bool situation, double value)
         {
             Id = id;
             Name = name;
+            Situation = situation;
             Value = value;
         }
 

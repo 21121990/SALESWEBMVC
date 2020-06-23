@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,8 @@ using SalesWebMvc.Data;
 using SalesWebMvc.Models;
 using SalesWebMvc.Services;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace SalesWebMvc
 {
@@ -53,15 +56,15 @@ builder.MigrationsAssembly("SalesWebMvc")));
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
-            /* var enUS = new CultureInfo("en-US");
+             var ptBR = new CultureInfo("pt-BR");
              var localizationOptions = new RequestLocalizationOptions
              {
-                 DefaultRequestCulture = new RequestCulture(enUS),
-                 SupportedCultures = new List<CultureInfo> { enUS },
-                 SupportedUICultures = new List<CultureInfo> { enUS }
+                 DefaultRequestCulture = new RequestCulture(ptBR),
+                 SupportedCultures = new List<CultureInfo> { ptBR },
+                 SupportedUICultures = new List<CultureInfo> { ptBR }
              };
              app.UseRequestLocalization(localizationOptions);
-             */
+             
 
             if (env.IsDevelopment())
             {
